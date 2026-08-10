@@ -1,0 +1,91 @@
+VOXTUTOR KNOWLEDGE BASE
+
+Topic: Recursion
+
+Recursion is a programming technique where a function calls itself to solve a smaller version of the same problem.
+
+Every recursive function should have a base case. The base case stops the recursion. Without a base case, the function may continue calling itself until the program runs out of memory.
+
+Example:
+
+int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+For factorial, the base case is n == 0. For example, 5! is calculated as 5 × 4 × 3 × 2 × 1 = 120.
+
+Topic: Arrays
+
+An array is a collection of elements of the same data type stored in contiguous memory locations.
+
+In C++, an array can be declared like this:
+
+int numbers[5];
+
+This creates an array that can store five integers. Array indexing starts at 0, so the first element is numbers[0] and the last element is numbers[4].
+
+Topic: Loops
+
+A loop is used to repeatedly execute a block of code.
+
+A for loop is useful when the number of repetitions is known.
+
+Example:
+
+for (int i = 0; i < 5; i++) {
+    cout << i << endl;
+}
+
+A while loop continues executing while its condition is true.
+
+Example:
+
+while (condition) {
+    // code
+}
+
+Topic: Functions
+
+A function is a reusable block of code designed to perform a specific task.
+
+A function can receive input through parameters and can return a value.
+
+Example:
+
+int add(int a, int b) {
+    return a + b;
+}
+
+Calling add(2, 3) returns 5.
+
+Topic: Pointers
+
+A pointer is a variable that stores the memory address of another variable.
+
+Example:
+
+int x = 10;
+int* ptr = &x;
+
+Here, ptr stores the address of x. The * operator can be used to access the value stored at that address.
+
+Topic: Time Complexity
+
+Time complexity describes how the running time of an algorithm grows as the input size increases.
+
+Common time complexities include O(1), O(log n), O(n), O(n log n), and O(n²).
+
+O(1) means constant time. O(n) means the running time grows linearly with the input size. O(n²) commonly occurs when two nested loops iterate over the input.
+
+Topic: Binary Search
+
+Binary search is an efficient searching algorithm used on a sorted array.
+
+It repeatedly divides the search range into two halves.
+
+The time complexity of binary search is O(log n).
+
+For binary search to work correctly, the data must be sorted.

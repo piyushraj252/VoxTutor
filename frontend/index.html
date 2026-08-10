@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VoxTutor</title>
+
+    <style>
+        #stopButton {
+    margin-left: 18px;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 12px;
+    background: #475569;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#stopButton:hover {
+    background: #334155;
+    transform: scale(1.03);
+}
+
+#stopButton:active {
+    transform: scale(0.97);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* MAIN CONTAINER */
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+        }
+
+
+        /* LOGO */
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+
+        /* TITLE */
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+
+        /* TAGLINE */
+
+        .tagline {
+            color: #94a3b8;
+            font-size: 20px;
+            margin-bottom: 50px;
+        }
+
+
+        /* MICROPHONE CONTAINER */
+
+        .mic-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 35px;
+        }
+
+
+        /* MICROPHONE BUTTON */
+
+        #talkButton {
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+            border: none;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 0 40px rgba(37, 99, 235, 0.4);
+
+            transition: all 0.3s ease;
+        }
+
+
+        #talkButton:hover {
+
+            transform: scale(1.05);
+
+            box-shadow:
+                0 0 60px rgba(37, 99, 235, 0.6);
+        }
+
+
+        #talkButton:active {
+
+            transform: scale(0.95);
+        }
+
+
+        /* ANSWER BOX */
+
+        #status {
+
+            min-height: 80px;
+
+            max-width: 600px;
+
+            margin: auto;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            background: #1e293b;
+
+            color: #e2e8f0;
+
+            font-size: 18px;
+
+            line-height: 1.5;
+        }
+
+
+        /* STATUS TITLE */
+
+        .status-title {
+
+            color: #60a5fa;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+
+            margin-top: 45px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           LISTENING STATE
+           ========================================== */
+
+        #talkButton.listening {
+
+            background: #dc2626;
+
+            animation:
+                listeningPulse 1.2s infinite;
+        }
+
+
+        @keyframes listeningPulse {
+
+            0% {
+
+                box-shadow:
+                    0 0 0 0 rgba(220, 38, 38, 0.7);
+            }
+
+            70% {
+
+                box-shadow:
+                    0 0 0 25px rgba(220, 38, 38, 0);
+            }
+
+            100% {
+
+                box-shadow:
+                    0 0 0 0 rgba(220, 38, 38, 0);
+            }
+        }
+
+
+        /* ==========================================
+           THINKING STATE
+           ========================================== */
+
+        #talkButton.thinking {
+
+            background: #d97706;
+
+            animation:
+                thinkingPulse 1.5s infinite;
+        }
+
+
+        @keyframes thinkingPulse {
+
+            0% {
+
+                transform: scale(1);
+            }
+
+            50% {
+
+                transform: scale(1.05);
+            }
+
+            100% {
+
+                transform: scale(1);
+            }
+        }
+
+
+        /* ==========================================
+           SPEAKING STATE
+           ========================================== */
+
+        #talkButton.speaking {
+
+            background: #16a34a;
+
+            animation:
+                speakingPulse 1s infinite;
+        }
+
+
+        @keyframes speakingPulse {
+
+            0% {
+
+                box-shadow:
+                    0 0 20px rgba(22, 163, 74, 0.4);
+            }
+
+            50% {
+
+                box-shadow:
+                    0 0 50px rgba(22, 163, 74, 0.8);
+            }
+
+            100% {
+
+                box-shadow:
+                    0 0 20px rgba(22, 163, 74, 0.4);
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+            🎙️
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            VoxTutor
+        </h1>
+
+
+        <!-- TAGLINE -->
+
+        <p class="tagline">
+            Your Voice-First AI Tutor
+        </p>
+
+
+        <!-- MICROPHONE -->
+
+        <div class="mic-container">
+
+            <button id="talkButton">
+
+                🎤
+                <br>
+
+                Start Talking
+
+            </button>
+<button id="stopButton">⏹️ Stop</button>
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="status-title">
+
+            VoxTutor Status
+
+        </div>
+
+
+        <p id="status">
+
+            Press the button to start
+
+        </p>
+
+
+        <!-- FOOTER -->
+
+        <p class="footer">
+
+            Ask anything. Learn naturally. 🚀
+
+        </p>
+
+
+    </div>
+
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+         ========================================== -->
+
+
+    <script>
+
+
+
+    const talkButton = document.getElementById("talkButton");
+    const stopButton = document.getElementById("stopButton");
+    const status = document.getElementById("status");
+
+    const API_URL = "http://127.0.0.1:8000/chat";
+
+
+    /* ==========================================
+       SPEECH RECOGNITION
+       ========================================== */
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        status.textContent =
+            "Speech recognition is not supported in this browser.";
+
+        talkButton.disabled = true;
+
+    }
+
+    else {
+
+        const recognition = new SpeechRecognition();
+        
+
+        recognition.lang = "en-US";
+
+        // IMPORTANT:
+        // One question per button click
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+
+        let isListening = false;
+        let isProcessing = false;
+        let requestController = null;
+        /* ==========================================
+   STOP EVERYTHING
+   ========================================== */
+
+stopButton.addEventListener("click", () => {
+
+    // Stop microphone
+    if (isListening) {
+        recognition.stop();
+    }
+
+    // Stop AI voice immediately
+    window.speechSynthesis.cancel();
+
+    // Stop backend request if still running
+    if (requestController) {
+        requestController.abort();
+        requestController = null;
+    }
+
+    // Reset states
+    isListening = false;
+    isProcessing = false;
+
+    // Reset button appearance
+    talkButton.classList.remove(
+        "listening",
+        "thinking",
+        "speaking"
+    );
+
+    talkButton.innerHTML =
+        "🎤<br>Start Talking";
+
+    // Update status
+    status.textContent =
+        "⏹️ Stopped. Press Start Talking to continue.";
+});
+
+
+        /* ==========================================
+           START TALKING
+           ========================================== */
+
+        talkButton.addEventListener("click", () => {
+
+            // Don't start microphone again while already busy
+            if (isListening || isProcessing) {
+                return;
+            }
+
+
+            // Start listening
+            isListening = true;
+
+            status.textContent =
+                "🎧 Listening...";
+
+            talkButton.classList.add("listening");
+
+            talkButton.classList.remove(
+                "thinking",
+                "speaking"
+            );
+
+            talkButton.innerHTML =
+                "🛑<br>Listening...";
+
+
+            try {
+
+                recognition.start();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Recognition start error:",
+                    error
+                );
+
+                isListening = false;
+
+            }
+
+        });
+
+
+        /* ==========================================
+           USER FINISHED SPEAKING
+           ========================================== */
+
+        recognition.onresult = async (event) => {
+
+            // VERY IMPORTANT:
+            // Stop microphone immediately after
+            // receiving the user's question.
+
+            isListening = false;
+
+            recognition.stop();
+
+
+            const userText =
+                event.results[0][0].transcript;
+
+
+            console.log(
+                "User said:",
+                userText
+            );
+
+
+            /* ==========================================
+               THINKING
+               ========================================== */
+
+            isProcessing = true;
+
+            status.textContent =
+                "🤔 VoxTutor is thinking...";
+
+
+            talkButton.classList.remove(
+                "listening",
+                "speaking"
+            );
+
+            talkButton.classList.add(
+                "thinking"
+            );
+
+            talkButton.innerHTML =
+                "⏳<br>Thinking...";
+
+
+            try {
+
+
+                /* ==========================================
+                   SEND QUESTION TO BACKEND
+                   ========================================== */
+
+                requestController = new AbortController();
+
+const response =
+    await fetch(
+        API_URL,
+        {
+            method: "POST",
+            signal: requestController.signal,
+            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    message:
+                                        userText
+                                })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Backend error"
+                    );
+
+                }
+
+
+                console.log(
+                    "VoxTutor:",
+                    data.reply
+                );
+
+
+                /* ==========================================
+                   CLEAN MARKDOWN
+                   ========================================== */
+
+                const cleanReply =
+                    data.reply
+
+                        .replace(
+                            /\*\*(.*?)\*\*/g,
+                            "$1"
+                        )
+
+                        .replace(
+                            /\*(.*?)\*/g,
+                            "$1"
+                        )
+
+                        .replace(
+                            /`(.*?)`/g,
+                            "$1"
+                        );
+
+
+                /* ==========================================
+                   SHOW ANSWER
+                   ========================================== */
+
+                status.textContent =
+                    cleanReply;
+
+
+                /* ==========================================
+                   SPEAKING STATE
+                   ========================================== */
+
+                talkButton.classList.remove(
+                    "thinking",
+                    "listening"
+                );
+
+                talkButton.classList.add(
+                    "speaking"
+                );
+
+                talkButton.innerHTML =
+                    "🔊<br>Speaking...";
+
+
+                /* ==========================================
+                   TEXT TO SPEECH
+                   ========================================== */
+
+                const speech =
+                    new SpeechSynthesisUtterance(
+                        cleanReply
+                    );
+
+
+                speech.lang = "en-US";
+
+                speech.rate = 0.95;
+
+                speech.pitch = 1;
+
+
+                // Stop any previous speech
+                window.speechSynthesis.cancel();
+
+
+                /* ==========================================
+                   SPEECH FINISHED
+                   ========================================== */
+
+                speech.onend = () => {
+
+                    isProcessing = false;
+
+                    talkButton.classList.remove(
+                        "speaking"
+                    );
+
+                    talkButton.innerHTML =
+                        "🎤<br>Start Talking";
+
+                };
+
+
+                /* ==========================================
+                   START SPEAKING
+                   ========================================== */
+
+                window.speechSynthesis.speak(
+                    speech
+                );
+
+            }
+
+
+            /* ==========================================
+               BACKEND ERROR
+               ========================================== */
+
+           catch (error) {
+
+    // Stop button cancelled the request
+    if (error.name === "AbortError") {
+        return;
+    }
+
+    console.error(
+        error
+    );
+
+    isProcessing = false;
+
+                status.textContent =
+                    "❌ Could not connect to VoxTutor backend.";
+
+
+                talkButton.classList.remove(
+                    "listening",
+                    "thinking",
+                    "speaking"
+                );
+
+
+                talkButton.innerHTML =
+                    "🎤<br>Try Again";
+
+            }
+
+        };
+
+
+        /* ==========================================
+           MICROPHONE ERROR
+           ========================================== */
+
+        recognition.onerror = (event) => {
+
+            console.error(
+                "Speech error:",
+                event.error
+            );
+
+
+            isListening = false;
+            isProcessing = false;
+
+
+            status.textContent =
+                "❌ Microphone error: " +
+                event.error;
+
+
+            talkButton.classList.remove(
+                "listening",
+                "thinking",
+                "speaking"
+            );
+
+
+            talkButton.innerHTML =
+                "🎤<br>Try Again";
+
+        };
+
+
+        /* ==========================================
+           SPEECH ENDED
+           ========================================== */
+
+        recognition.onend = () => {
+
+            // Make absolutely sure the UI
+            // doesn't remain stuck in listening mode.
+
+            if (isListening) {
+
+                isListening = false;
+
+                talkButton.classList.remove(
+                    "listening"
+                );
+
+                talkButton.innerHTML =
+                    "🎤<br>Start Talking";
+
+            }
+
+        };
+
+    }
+
+
+       
+
+    </script>
+
+
+</body>
+
+</html>
